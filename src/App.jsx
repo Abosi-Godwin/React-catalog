@@ -1,57 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { initialSort, sortProducts } from "./components/scripts/sortHandler.js";
+import Header from "./components/header.jsx";
+import Main from "./components/main.jsx";
 import "./App.css";
 
 function App() {
     const [listType, setListType] = useState("latest");
+    const [allProducts, setAllProducts] = useState([]);
 
     function sortHandler(el) {
-        setListType(el.target.value);
+        const sortingType = el.target.value;
+        const productsToSort = [...allProducts];
+        sortingType === "latest"
+            ? initialSort(productsToSort, setAllProducts)
+            : sortProducts(sortingType, productsToSort, setAllProducts);
+        setListType(sortingType);
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const res = await fetch("https://fakestoreapi.com/products");
+            const data = await res.json();
+            setAllProducts(data);
+        };
+        fetchData();
+    }, []);
+
     return (
         <>
             <Header sortHandler={sortHandler}></Header>
-            <Main listType={listType}></Main>
-        </>
-    );
-}
-function Header({ sortHandler }) {
-    return (
-        <>
-            <header class="header w-screen flex flex-col items-stretch justify-between p-5 gap-y-5 shadow-md text-xl md:flex-row">
-                <div class="md:w-1/2 flex gap-x-2 w-full items-center justify-start">
-                    <h4 class="uppercase text-white text-2xl">Sort by:</h4>
-                    <select
-                        name="sorting"
-                        id="sorting"
-                        class="outline-none p-3  rounded-md focus:outline-none"
-                        onChange={sortHandler}
-                    >
-                        <option value="latest">Latest (Default)</option>
-                        <option value="cheapest">Price</option>
-                        <option value="best-selling">Best selling</option>
-                    </select>
-                </div>
-
-                <div class="md:w-1/2 flex ">
-                    <input
-                        class="w-full p-2 rounded focus:outline-none searchBar"
-                        type="search"
-                        placeholder="Search...."
-                        id="search"
-                    />
-                </div>
-            </header>
+            <Main products={allProducts} sortType={listType}></Main>
         </>
     );
 }
 
-function Main({ listType }) {
-    /* const allProducts = async ()=> {
-    }*/
-    return (
-        <>
-            <p className="text-2xl uppercase">{listType} products</p>
-        </>
-    );
-}
 export default App;

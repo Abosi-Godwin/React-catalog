@@ -1,23 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-/*
-'cloud-burst': {
-        '50': '#f1f7fd',
-        '100': '#e0ecf9',
-        '200': '#c7def6',
-        '300': '#a1c9ef',
-        '400': '#74ace6',
-        '500': '#548edd',
-        '600': '#3f73d1',
-        '700': '#3660bf',
-        '800': '#314f9c',
-        '900': '#2c447c',
-        '950': '#26355d',
-    },
-    
-*/
-
-header{
-  background-color: #314f9c;
+ *{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
